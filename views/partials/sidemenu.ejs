@@ -1,0 +1,73 @@
+<div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
+    <div class="navbar-header">
+        <ul class="nav navbar-nav flex-row">
+            <li class="nav-item me-auto">
+                <a class="navbar-brand" href="/user/dashboard">
+                    <span class="brand-logo">
+                        <img src="/images/alpery.png"  alt="logo">
+                    </span>
+                    <h2 class="brand-text"><%= project_name %></h2>
+                </a>
+            </li>
+            
+            <li class="nav-item nav-toggle" style="padding-left: 8px;" hidden>
+                <a class="nav-link modern-nav-toggle pe-0" data-bs-toggle="collapse">
+                    <i class="d-block d-xl-none text-primary toggle-icon font-medium-4" data-feather="x"></i>
+                    <i class="d-none d-xl-block collapse-toggle-icon font-medium-4  text-primary" data-feather="disc" data-ticon="disc"></i>
+                </a>
+            </li>
+            <span class="sidetoggle" hidden>Sidemenu Toggle</span>
+        </ul>
+    </div>
+    <!-- <div class="shadow-bottom"></div> -->
+    <br><br>
+    <div class="main-menu-content" style="padding-top: 12px;">
+        <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+            <li class="<%=(page_name == 'user-dashboard') ? 'active' : ''%> nav-item">
+                <a class="d-flex align-items-center" href="/user/dashboard">
+                    <i data-feather="home"></i>
+                    <span class="menu-title text-truncate" data-i18n="Dashboard">Dashboard</span>
+                </a>
+            </li>
+            
+
+            <li class=" navigation-header"><span data-i18n="Apps &amp; Pages">Apps &amp; Pages</span><i data-feather="more-horizontal"></i></li>
+           
+            <li class="<%=(page_name == 'user-management') ? 'active' : ''%> nav-item">
+                <a class="d-flex align-items-center">
+                    <i data-feather="user"></i>
+                    <span class="menu-title text-truncate" data-i18n="User">User Management</span>
+                </a>
+                <ul class="menu-content">
+                    <li class="<%=(page_name == 'user-management') ? 'active' : ''%>">
+                        <a class="d-flex align-items-center" href="/user/list">
+                            <i data-feather="arrow-right"></i>
+                            <span class="menu-item text-truncate" data-i18n="Users List">Users</span>
+                        </a>
+                    </li>
+                </ul>
+                
+
+
+
+            </li>
+
+            <li class="<%=(page_name == 'category-management') ? 'active' : ''%> nav-item" >
+                <a class="d-flex align-items-center" href="/category/list">
+                    <i data-feather="anchor"></i>
+                    <span class="menu-title text-truncate" data-i18n="category">Category Management</span>
+                </a>
+            </li> 
+          
+           
+        </ul>
+    </div>
+</div>
+<style>
+    .sidetoggle {
+        padding-top: 25px;
+        padding-left: 5px;
+        font-size: 10px;
+        color: white;
+    }
+</style>

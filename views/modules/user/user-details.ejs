@@ -1,0 +1,296 @@
+<!-- BEGIN: Content-->
+<div class="app-content content ">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper container-xxl p-0">
+        <div class="content-header row">
+            <div class="content-header-left col-md-9 col-12 mb-2">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <h2 class="content-header-title float-start mb-0">
+                            <%= page_title %>
+                        </h2>
+                        <div class="breadcrumb-wrapper">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/user/dashboard">Dashboard</a>
+                                </li>
+                                <li class="breadcrumb-item"><a href="/user/list">Users</a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <%= page_title %>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <section class="app-user-view-account">
+                <div class="row">
+                    <!-- User Sidebar -->
+                    <div class="col-xl-4 col-lg-5 col-md-5 order-1 order-md-0">
+                        <!-- User Card -->
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="user-avatar-section">
+                                    <div class="d-flex align-items-center flex-column">
+                                        <% if (response.profile_image) {%>
+                                            <% let imghref="/uploads/no-image.png" ; %>
+                                                <!-- <img class="img-fluid rounded mt-3 mb-2" src="../../../app-assets/images/portrait/small/avatar-s-2.jpg" height="110" width="110" alt="User avatar" /> -->
+                                                <div id="href_display">
+                                                    <!-- <a  href="<%=imghref%>" class="me-25">
+                                            <img class="img-fluid rounded mt-3 mb-2" src="<%=imghref%>" height="110" width="110" alt="User avatar" />
+                                        </a> -->
+                                                </div>
+                                                <%} else {%>
+                                                    <img class="img-fluid rounded mt-3 mb-2" src="/uploads/no-image.png"
+                                                        height="110" width="110" alt="User avatar" />
+                                                    <% } %>
+
+                                                        <div class="user-info text-center">
+                                                            <h4>
+                                                                <%= response.full_name %>
+                                                            </h4>
+                                                            <span class="badge bg-light-secondary">
+                                                                <%= response.role.roleDisplayName %>
+                                                            </span>
+                                                        </div>
+                                    </div>
+                                </div>
+                                <h4 class="fw-bolder border-bottom pb-50 mb-1">Details</h4>
+                                <div class="info-container">
+                                    <ul class="list-unstyled">
+                                        <li class="mb-75">
+                                            <span class="fw-bolder me-25">Email:</span>
+                                            <span>
+                                                <%= response.email %>
+                                            </span>
+                                        </li>
+                                        <li class="mb-75">
+                                            <% statusObj={ 'Banned' : { title: 'Banned' , class: 'badge-light-warning'
+                                                }, 'Active' : { title: 'Active' , class: 'badge-light-success'
+                                                }, 'Inactive' : { title: 'Inactive' , class: 'badge-light-secondary' }
+                                                }; $status=response['status'];
+                                                badge='<span class="badge userStatusUpdate cursor-pointer ' +
+                                                statusObj[$status].class + '" text-capitalized data-status="' + $status
+                                                + '" data-id="' + response['_id'] + '">' + statusObj[$status].title
+                                                + '</span>' %>
+                                                <span class="fw-bolder me-25">Status:</span>
+                                                <%- badge %>
+                                        </li>
+                                        <li class="mb-75">
+                                            <span class="fw-bolder me-25">Role:</span>
+                                            <span>
+                                                <%= response.role.roleDisplayName %>
+                                            </span>
+                                        </li>
+                                        <li class="mb-75">
+                                            <span class="fw-bolder me-25">Contact:</span>
+                                            <span>
+                                                <%= response.phone?response.phone:'N/A' %>
+                                            </span>
+                                        </li>
+                                        <!-- <li class="mb-75">
+                                                <span class="fw-bolder me-25">Bio:</span>
+                                                <span><%- response.bio?response.bio:'N/A' %></span>
+                                            </li> -->
+                                    </ul>
+                                    <div class="d-flex justify-content-center align-items-center pt-2">
+                                        <a href="javascript:;" class="btn btn-primary me-1 mb-2"
+                                            data-bs-target="#editUser" data-bs-toggle="modal">
+                                            Edit
+                                        </a>
+                                        <a href="javascript:;" id="del-<%= response._id %>"
+                                            class="btn btn-outline-danger mb-2 suspend-user">Remove</a>
+                                    </div>
+                                    <!-- <div class="d-flex justify-content-center align-items-center">
+                                        <a href="javascript:;" id="reset-<%= response._id %>" class="btn btn-warning me-1 mb-2 reset-user-password">Reset Password</a>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/ User Sidebar -->
+                    <!-- Change Password -->
+                    <div class="col-xl-8 col-lg-7 col-md-7 order-0 order-md-1">
+                        <!-- User Pills -->
+                        <ul class="nav nav-pills mb-2">
+                            <li class="nav-item" >
+                                <a class="nav-link active"
+                                    href="/user/view/<%=user._id%>">
+                                    <i data-feather="lock" class="font-medium-3 me-50"></i>
+                                    <span class="fw-bold">Security</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <!--/ User Pills -->
+                        <div class="card">
+                            <h4 class="card-header">Change Password</h4>
+                            <div class="card-body">
+                                <form id="formChangePassword" action="/user/change-password" method="POST"
+                                    enctype='application/x-www-form-urlencoded'>
+                                    <div class="alert alert-warning mb-2" role="alert">
+                                        <h6 class="alert-heading">Ensure that these requirements are met.</h6>
+                                        <div class="alert-body fw-normal">Minimum 8 characters long</b></div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="mb-2 col-md-6 form-password-toggle">
+                                            <label class="form-label" for="newPassword">New Password</label>
+                                            <div class="input-group input-group-merge form-password-toggle">
+                                                <input class="form-control" type="password" id="newPassword"
+                                                    name="newPassword"
+                                                    placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
+                                                <span class="input-group-text cursor-pointer">
+                                                    <i data-feather="eye"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-2 col-md-6 form-password-toggle">
+                                            <label class="form-label" for="confirmPassword">Confirm New Password</label>
+                                            <div class="input-group input-group-merge">
+                                                <input class="form-control" type="password" name="confirmPassword"
+                                                    id="confirmPassword"
+                                                    placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
+                                                <span class="input-group-text cursor-pointer"><i
+                                                        data-feather="eye"></i></span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <input type="hidden" name="id" value="<%= response._id %>">
+                                            <button type="submit" class="btn btn-primary me-2">Change Password</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/ Change Password -->
+                </div>
+            </section>
+            <!-- Edit User Modal -->
+            <div class="modal fade" id="editUser" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered modal-edit-user">
+                    <div class="modal-content">
+                        <div class="modal-header bg-transparent">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body pb-5 px-sm-5 pt-50">
+                            <div class="text-center mb-2">
+                                <h1 class="mb-1">Edit User Information</h1>
+                                <!-- <p>Updating user details will receive a privacy audit.</p> -->
+                            </div>
+                            <form id="editUserForm" class="row gy-1 pt-75" action="/user/update" method="POST"
+                                enctype='multipart/form-data'>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label" for="first_name">First Name</label>
+                                    <input type="text" id="first_name" name="first_name" class="form-control"
+                                        placeholder="John" value="<%= response.first_name %>"
+                                        data-msg="Please enter first name" />
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label" for="last_name">Last Name</label>
+                                    <input type="text" id="last_name" name="last_name" class="form-control"
+                                        placeholder="Doe" value="<%= response.last_name %>"
+                                        data-msg="Please enter last name" />
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label" for="modalEditUserEmail">Email:</label>
+                                    <input type="text" id="modalEditUserEmail" name="email" class="form-control"
+                                        value="<%= response.email %>" placeholder="example@domain.com" />
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label" for="modalEditUserPhone">Phone</label>
+                                    <input type="text" id="modalEditUserPhone" name="phone"
+                                        class="form-control dt-contact" placeholder=" (609) 933-44-22"
+                                        value="<%= response.phone %>" />
+                                </div>
+                                <!-- <div class="col-12 col-md-12">
+                                        <label class="form-label" for="address">Address</label>
+                                        <input type="text" id="address" name="address" class="form-control"
+                                            placeholder="Address" value=""
+                                            data-msg="Please enter address" />
+                                    </div> -->
+                                <div class="col-12 col-md-6">
+                                    <!-- upload and reset button -->
+                                    <% if (response.profile_image) {%>
+                                        <a href="/uploads/profile_pic/<%= response.profile_image %>" class="me-25">
+                                            <img src="/uploads/profile_pic/<%= response.profile_image %>"
+                                                id="account-upload-img" class="uploadedAvatar rounded me-50"
+                                                alt="profile image" style="max-width: 100px; max-height: 100px;" />
+                                        </a>
+                                        <%} else {%>
+                                            <a href="/uploads/no-image.png" class="me-25">
+                                                <img src="/uploads/no-image.png" id="account-upload-img"
+                                                    class="uploadedAvatar rounded me-50" alt="profile image"
+                                                    style="max-width: 100px; max-height: 100px;" />
+                                            </a>
+                                            <%}%>
+                                                <label for="account-upload"
+                                                    class="btn btn-sm btn-primary mb-75 me-75 form-label">Upload
+                                                    Profile Image</label>
+                                                <input type="file" name="profile_image" id="account-upload" hidden
+                                                    accept="image/*" />
+                                                <button type="button" id="account-reset"
+                                                    class="btn btn-sm btn-outline-secondary mb-75 d-none"
+                                                    style="margin-top: 8px;">Reset</button>
+                                                <p class="mb-0">Upload image file only.</p>
+                                                <!--/ upload and reset button -->
+                                </div>
+                                <div class="col-12 text-center mt-2 pt-50">
+                                    <input type="hidden" name="id" value="<%= response._id %>">
+                                    <button type="submit" class="btn btn-primary me-1">Submit</button>
+                                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                                        aria-label="Close">
+                                        Discard
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END: Content-->
+
+
+<!-- BEGIN: Page JS-->
+<script src="/js/pages/modal-edit-user.js"></script>
+<script src="/js/pages/app-user-view.js"></script>
+<!-- END: Page JS-->
+
+<script>
+    let profileImg = '<%=response.profile_image%>';
+    function UrlExists(url) {
+        var http = new XMLHttpRequest();
+        http.open('HEAD', url, false);
+        http.send();
+        return http.status !== 404;
+    }
+    let url = `/uploads/profile_pic/${profileImg}`;
+    let status = UrlExists(url);
+    let imghref = "/uploads/no-image.png";
+    if (status == true) {
+        let hrefHtml = document.getElementById("href_display");
+        //   hrefHtml="";
+        hrefHtml.insertAdjacentHTML("beforeend", `
+                                                      <a id="href_display" href="/uploads/profile_pic/${profileImg}" class="me-25">
+                                            <img class="img-fluid rounded mt-3 mb-2" src="/uploads/profile_pic/${profileImg}" height="110" width="110" alt="User avatar" />
+                                        </a>
+                                                      `)
+    } else {
+        let hrefHtml = document.getElementById("href_display");
+        //   hrefHtml="";
+        hrefHtml.insertAdjacentHTML("beforeend", `
+                                                      <a id="href_display" href="/uploads/no-image.png" class="me-25">
+                                            <img class="img-fluid rounded mt-3 mb-2" src="/uploads/no-image.png" height="110" width="110" alt="User avatar" />
+                                        </a>
+                                                      `)
+
+    }
+
+</script>
