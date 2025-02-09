@@ -13,6 +13,7 @@ import flash from 'connect-flash';
 import session from "cookie-session";
 import moment from 'moment';
 import customEjsRenderer from "./app/middlewares/renderWithLayout.js";
+import { RoleRepository } from "./app/modules/roles/repository/Role.repository.js";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
 

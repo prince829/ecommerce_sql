@@ -33,45 +33,6 @@ router.get('/video/stream', async (req, res) => {
     }
 });
 
-/**
- * @swagger
- * /user/signup:
- *   post:
- *     summary: Signup/ Register
- *     tags:
- *       - User
- *     produces:
- *       - application/json
- *     parameters:
- *         - name: body
- *           in: body
- *           description: Signup
- *           required: true
- *           schema:
- *             type: object
- *             required:
- *                 - email
- *                 - first_name
- *                 - last_name
- *                 - confirm_password
- *                 - password
- *             properties:
- *                 email:
- *                      type: string
- *                 first_name:
- *                      type: string
- *                 last_name:
- *                      type: string
- *                 password:
- *                      type: string
- *                 confirm_password:
- *                      type: string
- *     responses:
- *        200:
- *          description: Registration Successful
- *        
- */
-
 router.post('/user/signup', async (req, res) => {
 
     try {

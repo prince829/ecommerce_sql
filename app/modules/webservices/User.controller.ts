@@ -23,7 +23,7 @@ export class UserController {
      */
     async signup(req: Request<{}, {}, CreateUser>, _res: Response): Promise<IResponse> {
         try {
-            let role = await this.roleRepo.getByField({ "role": "admin" });
+            let role = await this.roleRepo.getByField({ "role": "user" });
             if (!role) {
                 return { success: false, message: "Role not found", status: 400 }
             };
@@ -35,7 +35,7 @@ export class UserController {
             if (req.body.password !== req.body.confirm_password)
                 return { success: false, message: "Password and confirm password should be same", status: 400 };
             req.body.roleId = role.id;
-            req.body.full_name = `${req.body.first_name} ${req.body.last_name}`
+            // req.body.full_name = `${req.body.first_name} ${req.body.last_name}`
             req.body.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10));
             const saveUser = await this.userRepo.save(req.body);
             if (!saveUser) {
@@ -69,7 +69,7 @@ export class UserController {
                 if (!bcrypt.compareSync(password, checkUser.password))
                     return { success: false, message: "Invalid password", status: 202 };
                 let payload = {
-                    id: checkUser._id
+                    id: checkUser.id
                 }
                 const token = jwt.sign(payload, config.server.jwtSecret, {
                     expiresIn: '30d',
