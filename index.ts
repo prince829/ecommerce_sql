@@ -20,18 +20,11 @@ const app = express();
 const getPort = config.server.port;
 
 /********* Functions + variable declaration start*********/
-globalThis.utils = Utils
 globalThis.moment = moment;
-// Inclide main view path for (admin) //
-globalThis.layout_directory = '../../layouts';
-globalThis.module_directory = '../../modules';
-globalThis.partial_directory = './partials';
-globalThis.project_description = "Basic Admin Setup";
-globalThis.project_name = "Basic Setup";
 /********* Functions + variable declaration end*********/
 // custom modules will goes here
 
-globalThis.auth = authMiddleware.default();
+// globalThis.auth = authMiddleware.default();
 
 app.use(function (_req: Request, res: Response, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -68,7 +61,7 @@ app.set("views", path.join(__dirname, "views"));
 app.engine('ejs', customEjsRenderer);
 app.set("view engine", "ejs");
 // app.set('view cache', true);
-app.use(auth.initialize());
+// app.use(auth.initialize());
 app.use(async (req: Request, res: Response, next) => {
     res.locals.user = null;
     res.header('Cache-Control', 'private, no-cache, max-age=3600');
@@ -156,7 +149,7 @@ const onError = (error: any) => {
         /******************* Service Launch *****************/
         app.listen(getPort);
         app.on('error', onError);
-        console.log(`${config.server.project_name} is running on ${(global.BASE_URL && global.BASE_URL !== '') ? global.BASE_URL : `http://localhost:${getPort}`}`);
+        console.log(`${config.server.project_name} is running on 'http://localhost:${getPort}'`);
     } catch (error) {
         console.error(error);
     }

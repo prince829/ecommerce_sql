@@ -53,7 +53,7 @@ router.post('/user/signin', async (req, res) => {
         res.status(error.status).send(error);
     }
 });
-router.all('/user*', global.auth.authenticateAPI)
+// router.all('/user*', global.auth.authenticateAPI)
 router.get('/user/details', async (req, res) => {
 
     try {

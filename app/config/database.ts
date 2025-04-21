@@ -16,6 +16,7 @@ export default async () => {
 
     try {
         await sequelize.authenticate();
+        globalThis.sequelize=sequelize;
         console.log('DB connected successfully');
     } catch (error) {
         console.error('Unable to connect to the database:', error);

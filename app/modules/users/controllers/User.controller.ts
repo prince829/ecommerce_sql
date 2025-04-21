@@ -8,6 +8,7 @@ import bcrypt from 'bcryptjs';
 import { Mailer } from "../../../helper/Mailer.js";
 import { Types } from "mongoose";
 import { existsSync, unlinkSync } from "fs"
+import { IResponse } from "../../../helper/IResponse.js";
 
 export class UserController {
     private userRepo = new UserRepository();
@@ -78,54 +79,10 @@ export class UserController {
         }
     };
     /**
-     * //@Method:dashboard
-     * //@Description: To render dashbaord page
-     */
-    async dashboard(req: Request, res: Response) {
-        try {
-            const userStat=await this.userRepo.getUserStat();
-            res.render('modules/user/dashboard.ejs',
-                {
-                    page_name: 'user-dashboard',
-                    page_title: 'Dashboard',
-                    user: req.user,
-                    userStat:userStat
-                }
-            );
-        } catch (err: any) {
-            return res.status(500).send({ message: err.message });
-        }
-    };
-    /**
-     * //@Method:list
-     * //@Description:To render list page
-     */
-    async list(req: Request, res: Response) {
-        try {
-            let getStat = await this.userRepo.getUserStat();
-            let status=""
-            if(req.query && req.query.status){
-                status=(req.query.status as string)
-            }
-            res.render('modules/user/list.ejs', {
-                page_name: 'user-management',
-                page_title: "User List",
-                user: req.user,
-                stats: getStat,
-                status
-            })
-
-        } catch (err: any) {
-            console.log(err);
-
-            return res.status(500).send({ message: err.message });
-        }
-    };
-    /**
      * //@Method:getAll
      * //@Description:To get All Data
      */
-    async getAll(req: Request, _res: Response): Promise<any> {
+    async getAll(req: Request, _res: Response): Promise<IResponse> {
         try {
             let start = parseInt(req.body.start);
             let length = parseInt(req.body.length);
@@ -135,19 +92,20 @@ export class UserController {
             }
             req.body.page = currentPage;
             let user = await this.userRepo.getAllUser(req);
-            let data = {
-                "recordsTotal": user.totalDocs,
-                "recordsFiltered": user.totalDocs,
-                "data": user.docs
-            };
+            // let data = {
+            //     "recordsTotal": user.totalDocs,
+            //     "recordsFiltered": user.totalDocs,
+            //     "data": user.docs
+            // };
 
             return {
                 status: 200,
-                data: data,
+                data: user,
+                success: true,
                 message: `Data fetched successfully.`
             };
         } catch (err: any) {
-            return { status: 500, data: [], message: err.message }
+            return { status: 500, success:false, message: err.message }
         }
     };
     /**

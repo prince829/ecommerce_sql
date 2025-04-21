@@ -6,7 +6,7 @@ const request_param = multer();
 
 const categoryController = new CategoryController();
 
-router.all('/category*', auth.authenticate);
+// router.all('/category*', auth.authenticate);
 
 router.get('/category/list', async (req, res) => await categoryController.list(req, res));
 

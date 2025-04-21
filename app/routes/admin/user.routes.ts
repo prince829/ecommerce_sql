@@ -38,7 +38,7 @@ router.get(`/user/forget/reset/password/:id`, async(req,res)=>await userControll
 
 router.post(`/user/forget/reset/password/update`,request_param.any(), async(req,res)=>await userController.updateResetPassword(req,res));
 
-router.all('/*',auth.authenticate);
+// router.all('/*',auth.authenticate);
 
 // admin logout
 router.get("/admin/logout", async(req, res) => await userController.logout(req, res));
@@ -55,20 +55,10 @@ router.get('/admin/security/:id', async(req,res)=>await userController.security(
 //admin password change
 router.post('/update/admin-password', request_param.any(), async(req,res)=>await userController.adminUpdatePassword(req,res));
 
-//For Dashboard Rendering
-router.get('/user/dashboard',async (req,res)=>await userController.dashboard(req,res));
-
-router.get('/user/list',async(req, res) => await userController.list(req, res));
-
-router.get("/user/view/:id", async(req, res) => await userController.details(req, res));
-
 router.post('/user/getall', async (req, res) => {
   try {
       const success = await userController.getAll(req, res);
-      res.send({
-          "meta": success.meta,
-          "data": success.data
-      });
+      res.status(success.status).send(success);
   } catch (error:any) {
       res.status(error.status).send(error);
   }

@@ -1,4 +1,4 @@
-import { UserDocument, userStatus } from "../../../interface/UserInterface.js";
+import { userStatus } from "../../../interface/UserInterface.js";
 const registerType = ["Normal", "Phone", "Google", "Facebook", "Apple"];
 import {
   BelongsTo,
@@ -10,11 +10,12 @@ import {
   Model,
 } from "sequelize-typescript";
 import Role from "../../roles/models/Role.model.js";
+import { InferAttributes, InferCreationAttributes } from "sequelize";
 @Table({
   tableName: "users_info",
   timestamps: true, // Optional: adds createdAt and updatedAt fields
 })
-export default class User extends Model<UserDocument> implements UserDocument{
+export default class User extends Model<InferAttributes<User>,InferCreationAttributes<User>>{
   @Index
   @Column({ type: DataType.STRING, allowNull: false, defaultValue: "" })
   declare first_name: string;
